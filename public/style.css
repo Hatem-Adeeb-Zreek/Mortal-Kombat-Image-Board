@@ -39,11 +39,19 @@ p {
         sans-serif;
 }
 
-/* Single column display for phones */
-@media (max-width: 459px) {
+@media (max-width: 916px) {
+    #main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Single column display for small screens */
+@media (max-width: 614px) {
     #main {
         display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
     }
 }
