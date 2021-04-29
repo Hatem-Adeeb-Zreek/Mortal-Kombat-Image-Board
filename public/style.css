@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(to right, #262c32 0%, #ff8ab3 100%);
+}
+
+#main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 300px;
+    height: 300px;
+    grid-column-gap: 10px;
+    grid-row-gap: 15px;
+    margin: 20px 20px;
+}
+
+.cards {
+    background: linear-gradient(to right, #99bee2 0%, #ffea8a 100%);
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+}
+
+img {
+    margin: 5px;
+    width: 280px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+p {
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+}
+
+/* Single column display for phones */
+@media (max-width: 459px) {
+    #main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}

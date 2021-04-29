@@ -1,10 +1,16 @@
 <!doctype html>
 <html>
 <head>
-    <title></title>
+    <title>Image Board</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="main">
+        <div class="cards" v-for="image in images">
+            <img :src="image.url">
+            <p>{{image.title}}</p>
+        </div>
+    </div>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
-</body>
-</html>
+    <script src="/js/script.js"></script>
