@@ -2,14 +2,21 @@
 <html>
 <head>
     <title>Image Board</title>
+    <link rel='shortcut icon' type='image/png' href='./favicon-32x32.png' />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Iceland&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="main">
-        <div class="cards" v-for="image in images">
-            <img :src="image.url">
-            <p>{{image.title}}</p>
+    <div id="container">
+        <h1>Image Board</h1>
+        <div id="main">
+            <div class="cards" v-for="image in images">
+                <img :src="image.url">
+                <p>{{image.title}}</p>
+            </div>
         </div>
+        
     </div>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
