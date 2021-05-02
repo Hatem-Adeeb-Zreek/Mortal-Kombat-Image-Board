@@ -2,22 +2,35 @@
 <html>
 <head>
     <title>Image Board</title>
-    <link rel='shortcut icon' type='image/png' href='./favicon-32x32.png' />
+    <link rel='shortcut icon' type='image/png' href='./fi.png' />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Iceland&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="container">
-        <h1>Image Board</h1>
+        <img src="./Mortal-Kombat-Emblem.png" alt="logo" id="logo">
+        <h1>Mortal Kombat <br> Image Board</h1>
         <div id="main">
-            <div class="cards" v-for="image in images">
-                <img :src="image.url">
-                <p>{{image.title}}</p>
-            </div>
+            <form action="">
+                 
+                <input @change="handleChange" type="file" name="file" accept="image/*" id="file">
+                <input v-model="title" type="text" name="title" placeholder="title" autocomplete="off">
+                <input v-model="description" type="text" name="description" placeholder="description" autocomplete="off">
+                <input v-model="username" type="text" name="username" placeholder="user name" autocomplete="off">
+                <button @click="handleClick">submit</button>
+
+            </form>
+              <div class="image-board">
+                <div class="image-piece" v-for="image in images">
+                    <div class="image-container">
+                        <img v-bind:src="image.url">
+                    </div>
+                    <div class=text-container>
+                        <p>{{image.title}}</p>
+                    </div>
+                </div>
+              </div>
         </div>
-        
-    </div>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/script.js"></script>
