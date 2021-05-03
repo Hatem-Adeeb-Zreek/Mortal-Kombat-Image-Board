@@ -19,7 +19,7 @@ new Vue({
             });
     },
     methods: {
-        handleClick: (e) => {
+        handleClick: function (e) {
             e.preventDefault();
             var formData = new FormData(); //we need this to send a *file*
             formData.append("title", this.title);
@@ -29,14 +29,14 @@ new Vue({
 
             axios
                 .post("/upload", formData)
-                .then(({ data }) => {
-                    this.images.unshift(data);
+                .then((response) => {
+                    this.images.unshift(response.data.rows[0]);
                 })
                 .catch((err) => {
                     console.log("error in axios POST /upload", err);
                 });
         },
-        handleChange: (e) => {
+        handleChange: function (e) {
             this.file = e.target.files[0]; //grabbing the file from the choose file button
         },
     },
