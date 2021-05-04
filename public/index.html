@@ -2,14 +2,18 @@
 <html>
 <head>
     <title>Image Board</title>
-    <link rel='shortcut icon' type='image/png' href='./fi.png' />
+    <link rel='shortcut icon' type='image/png' href='./favicon_io(4)/favicon-32x32.png' />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Iceland&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-        <img src="./Mortal-Kombat-Emblem.png" alt="logo" id="logo">
-        <h1>Mortal Kombat <br> Image Board</h1>
+        <header>
+             <img src="./Mortal-Kombat-Emblem.png" alt="logo" id="logo">
+             <h1>Mortal Kombat <br> Image Board</h1>
+             <img src="./Mortal-Kombat-Emblem.png" alt="logo" id="logo">
+        </header>
+        
         <div id="main">
             <form action="">
                  
@@ -43,12 +47,13 @@
                     <div class="modal">
                           <div class="modal-details">
                             <div class="modal-img-cont">
-                                <img :src="imgDetails.url" alt="" srcset="">
+                                <img :src="imgDetails.url" alt="" srcset="" class="img-cr">
                             </div>
                             <div class="modal-text">
                                 <h2>{{ imgDetails.title }}</h2>
                                 <h3>{{ imgDetails.description }}  </h3>
                                 <p class="by-user">uploaded by {{ imgDetails.username }} on {{ created_at }}</p>
+                            
                             </div>
                         </div>
                         
