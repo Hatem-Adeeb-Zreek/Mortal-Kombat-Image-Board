@@ -13,9 +13,25 @@
              <h1>Mortal Kombat <br> Image Board</h1>
              <img src="./Mortal-Kombat-Emblem.png" alt="logo" id="logo">
         </header>
+         <div id="logos">
+            <img src="./logos/chameleon.webp" alt="chameleon" id="img-logos">
+            <img src="./logos/Cyrax-r.webp" alt="Cyrax-r" id="img-logos">
+            <img src="./logos/Jade.webp" alt="Jade" id="img-logos">
+            <img src="./logos/JAX.webp" alt="JAX" id="img-logos">
+            <img src="./logos/Kabal.webp" alt="Kabal" id="img-logos">
+            <img src="./logos/Liu_Kang_MK3.webp" alt="Liu_Kang_MK3" id="img-logos">
+            <img src="./logos/NOOB3.webp" alt="NOOB3" id="img-logos">
+            <img src="./logos/Rayden-mk2-fix.webp" alt="Rayden-mk2-fix" id="img-logos">
+            <img src="./logos/Shaokahn.webp" alt="Shaokahn" id="img-logos">
+            <img src="./logos/Sindel-r.webp" alt="Sindel-r" id="img-logos">
+            <img src="./logos/SMK3.webp" alt="SMK3" id="img-logos">
+            <img src="./logos/Sonya-mk3-fix1.webp" alt="Sonya-mk3-fix1" id="img-logos">
+            <img src="./logos/Stryker-r.webp" alt="Stryker-r" id="img-logos">
+            <img src="./logos/SUBZEROII.webp" alt="SUBZEROII" id="img-logos">
+        </div>
         
         <div id="main">
-            <form action="">
+            <form action="" id="form">
                  
                 <input @change="handleChange" type="file" name="file" accept="image/*" id="file">
                 <input v-model="title" type="text" name="title" placeholder="title" autocomplete="off">
@@ -26,58 +42,72 @@
 
             </form>
               <div class="image-board">
-                <div class="image-piece" v-for="image in images" :key="image.id" @click="imageClick(image.id)">
-                    <div class="image-container">
-                        <img v-bind:src="image.url">
-                    </div>
+            <div v-for="image in images" :key="image.id">
+                <div class="image-card">
+                    <a :href="'#'+ image.id" @mouseenter="imageMouseenter">
+                        <div class="img-container" >
+                            <img v-bind:src="image.url">
+                        </div>
+                    </a>
                     <div class=text-container>
                         <p>{{image.title}}</p>
                     </div>
                 </div>
-                    <modal-component
-                        v-if="selectedImage"
-                        :selected-image="selectedImage"
-                        @close="closeModalFn"
-                    ></modal-component>
-              </div>
-              <p id="more-btn" v-if="more" @click="getMore">More Images</p>
+            </div>
         </div>
 
-         <script id="modal-template" type="text/x-template">
-                 <div>
-                    <div class="overlay" @click="closeModal"></div>
-                    <div class="modal" v-on:keyup.esc="closeModal">
-                          <div class="modal-details">
+            <modal-component
+            v-if="selectedImage"
+            :selected-image="selectedImage"
+            @close="closeModalFn"            
+            ></modal-component>
+       
+    </div>
+
+    <script id="modal-template" type="text/x-template">
+        <div>
+            <div class="overlay" @click="closeModal"></div>
+            <div class="modal" v-on:keyup.esc="closeModal">
+                
+                <div class="modal-details">
+
+                    <div id="modal-left">
+                        <h1>{{ imgDetails.title }}</h1>
                             <div class="modal-img-cont">
-                                <img :src="imgDetails.url" alt="" srcset="" class="img-cr">
+                                <img :src="imgDetails.url" alt="" srcset="">
                             </div>
-                            <div class="modal-text">
-                                <h2>{{ imgDetails.title }}</h2>
-                                <h3>{{ imgDetails.description }}  </h3>
-                                <p class="by-user">uploaded by {{ imgDetails.username }} on {{ created_at }}</p>
-                            
-                            </div>
-                        </div>
-                        
+                        <h3>{{ imgDetails.description }}  </h3>
+                        <p class="by-user">uploaded by {{ imgDetails.username }} on {{ created_at }}</p>
+                    </div>
+                
+                
+                    <div id="modal-right">
                         <div id="comments-form">
                             <form action="">                                
-                                <input v-model="cmtText" type="text" name="cmtText" size="50" placeholder="type your comment here..." autocomplete="off">
-                                <input v-model="cmtUser" type="text" name="cmtUser" size="10" placeholder="your name" autocomplete="off">
+                                <input v-model="cmtText" @click=hideMessageModal type="text" name="cmtText" size="40" placeholder="comment *" autocomplete="off">
+                                <input v-model="cmtUser" @click=hideMessageModal type="text" name="cmtUser" size="20" placeholder="user name *" autocomplete="off">
                                 <button @click="submitComment">submit</button>
+                                <p v-if="errmsgmodal" @click=hideMessageModal>you can't submit empty fields</p>
                             </form>
                         </div>
-                         <p v-if="errmsg" class="err-msg">you cannot submit with empty fields</p>
-                        <div class="comments-cont">  
-                              <div class="comment-box" v-for="cmt in imgComments" v-if="cmt.cmnt_id">    
+                        
+                        <div class="comments">                            
+                            <!-- <h3>comment section</h3> -->
+                            <div class="comment-box" v-for="cmt in imgComments" v-if="cmt.cmnt_id">                                
                                 <p>{{ cmt.comment }}</p>
-                                 <p class="by-user">written by {{ cmt.cmnt_writer }} at {{cmt.cmnt_time}} </p>
+                                <p class="by-user">written by {{ cmt.cmnt_writer }} at {{cmt.cmnt_time}} </p>
                             </div>
                         </div>
-                         <p @click="closeModal" class="close-btn">close</p>
                     </div>
-                </div>
-            </script>
 
+                </div> 
+                <p @click="closeModal" class="close-btn">close</p>
+            </div> 
+        </div>
+    </script>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="/js/script.js"></script>
+</body>
+</html>

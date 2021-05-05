@@ -1,43 +1,24 @@
-// db config
+// DATABASE Config
 const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:123456789@localhost:5432/imageboard");
 
-// getImages function
+// GET Functions
+
+// getImages Function
 exports.getImages = () => {
     return db.query(`
-    SELECT * FROM images
+    SELECT *, (
+    SELECT id FROM images
+    ORDER BY id ASC
+    LIMIT 1
+    ) AS "lowestid" 
+    FROM images
     ORDER BY id DESC
-    LIMIT 8;
+    LIMIT 5;
     `);
 };
 
-// addImage function
-exports.addImage = (url, username, title, description) => {
-    return db.query(
-        `
-        INSERT INTO images (url, username, title, description)
-        VALUES ($1, $2, $3, $4)
-        RETURNING *
-        `,
-        [url, username, title, description]
-    );
-};
-
-// addComment function
-
-exports.addComment = (comment, username, imageid) => {
-    return db.query(
-        `
-        INSERT INTO comments (comment, username, image_id)
-        VALUES ($1, $2, $3)
-        RETURNING
-        id AS cmnt_id, comment, created_at AS cmnt_time, username AS cmnt_writer
-        `,
-        [comment, username, imageid]
-    );
-};
-
-// getAllDetails function
+// getAllDetails Function
 exports.getAllDetails = (imageid) => {
     return db.query(
         `
@@ -49,12 +30,13 @@ exports.getAllDetails = (imageid) => {
         LEFT JOIN comments
         ON images.id = comments.image_id
         WHERE images.id = $1
-        ORDER BY comments.id DESC
+        ORDER BY comments.id DESC;
         `,
         [imageid]
     );
 };
 
+// getLowestId Function
 exports.getLowestId = () => {
     return db.query(
         `
@@ -65,6 +47,7 @@ exports.getLowestId = () => {
     );
 };
 
+// getMoreImages Function
 exports.getMoreImages = (lastid) => {
     return db.query(
         `
@@ -72,11 +55,43 @@ exports.getMoreImages = (lastid) => {
         SELECT id FROM images
         ORDER BY id ASC
         LIMIT 1
-        ) AS "lowestid" FROM images
+        ) AS "lowestid" 
+        FROM images
         WHERE id < $1
         ORDER BY id DESC
-        LIMIT 8;
+        LIMIT 5;
         `,
         [lastid]
+    );
+};
+
+// INSERT Functions
+
+// addImage Function
+exports.addImage = (url, username, title, description) => {
+    return db.query(
+        `
+        INSERT INTO images (url, username, title, description)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *, (
+        SELECT id FROM images
+        ORDER BY id ASC
+        LIMIT 1
+        ) AS "lowestid";
+        `,
+        [url, username, title, description]
+    );
+};
+
+// addComment Function
+exports.addComment = (comment, username, imageid) => {
+    return db.query(
+        `
+        INSERT INTO comments (comment, username, image_id)
+        VALUES ($1, $2, $3)
+        RETURNING
+        id AS cmnt_id, comment, created_at AS cmnt_time, username AS cmnt_writer;
+        `,
+        [comment, username, imageid]
     );
 };

@@ -1,18 +1,11 @@
 // import modules
 const express = require("express");
 const app = express();
-const {
-    getImages,
-    addImage,
-    getAllDetails,
-    addComment,
-    getLowestId,
-    getMoreImages,
-} = require("./db");
+const db = require("./db");
 const s3 = require("./s3");
 const { s3Url } = require("./config.json");
 
-// MULTER
+// Multer Section
 const multer = require("multer");
 const uidSafe = require("uid-safe");
 const path = require("path");
@@ -39,30 +32,23 @@ const uploader = multer({
 app.use(express.static("public"));
 app.use(express.json());
 
-//Routes
-// GET images
+// Routes
+
+// GET /images Route
 app.get("/images", (req, res) => {
-    let lowestId;
-    getLowestId()
+    db.getImages()
         .then(({ rows }) => {
-            lowestId = rows[0].id;
-        })
-        .catch((err) => {
-            console.log("error in GET /images getLowestId()", err);
-        });
-    getImages()
-        .then(({ rows }) => {
-            res.json({ rows, lowestId });
+            res.json({ rows });
         })
         .catch((err) => {
             console.log("error in GET /images getImages()", err);
         });
 });
 
-// GET details about specific image
+// GET /getall/:imageid Route
 app.get("/getall/:imageid", (req, res) => {
     const { imageid } = req.params;
-    getAllDetails(imageid)
+    db.getAllDetails(imageid)
         .then(({ rows }) => {
             res.json(rows);
         })
@@ -71,13 +57,13 @@ app.get("/getall/:imageid", (req, res) => {
         });
 });
 
-// upload an image
+// POST /upload Route
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     if (req.file) {
         const { username, title, description } = req.body;
         if (title !== "" && username !== "") {
             const url = `${s3Url}${req.file.filename}`;
-            addImage(url, username, title, description).then(({ rows }) => {
+            db.addImage(url, username, title, description).then(({ rows }) => {
                 res.json({
                     success: true,
                     rows,
@@ -97,16 +83,15 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     }
 });
 
-// add a comment to the specific image
+// POST /addcomment Route
 app.post("/addcomment", (req, res) => {
     const { comment, username, imageid } = req.body;
     if (comment !== "" && username !== "") {
-        addComment(comment, username, imageid).then(({ rows }) => {
+        db.addComment(comment, username, imageid).then(({ rows }) => {
             res.json({
                 success: true,
                 rows,
             });
-            console.log("comment added!");
         });
     } else {
         res.json({
@@ -116,10 +101,10 @@ app.post("/addcomment", (req, res) => {
     }
 });
 
-// get more images
+// GET /moreimages/:lastid Route
 app.get("/moreimages/:lastid", (req, res) => {
     const { lastid } = req.params;
-    getMoreImages(lastid)
+    db.getMoreImages(lastid)
         .then(({ rows }) => {
             res.json(rows);
         })
@@ -128,7 +113,7 @@ app.get("/moreimages/:lastid", (req, res) => {
         });
 });
 
-// listening to port 8080
-app.listen(8080, () => {
-    console.log("listen to port 8080");
-});
+// PORT Listening
+app.listen(process.env.PORT || 8080, () =>
+    console.log("Mortal Kombat ImageBoard running")
+);

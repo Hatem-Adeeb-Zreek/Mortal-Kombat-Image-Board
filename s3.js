@@ -1,8 +1,6 @@
-// aws and S3 config
-
+// AWS
 const aws = require("aws-sdk");
 const fs = require("fs");
-
 let secrets;
 if (process.env.NODE_ENV == "production") {
     secrets = process.env;
@@ -10,12 +8,13 @@ if (process.env.NODE_ENV == "production") {
     secrets = require("./secrets");
 }
 
+// S3
 const s3 = new aws.S3({
     accessKeyId: secrets.AWS_KEY,
     secretAccessKey: secrets.AWS_SECRET,
 });
 
-//  upload middleware
+//  UPLOAD middleware
 exports.upload = (req, res, next) => {
     if (!req.file) {
         console.log("no files to upload...");
