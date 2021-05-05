@@ -7,6 +7,7 @@ exports.getImages = () => {
     return db.query(`
     SELECT * FROM images
     ORDER BY id DESC
+    LIMIT 8;
     `);
 };
 
@@ -24,20 +25,20 @@ exports.addImage = (url, username, title, description) => {
 
 // addComment function
 
-// exports.addComment = (comment, username, imageId) => {
-//     return db.query(
-//         `
-//         INSERT INTO comments (comment, username, image_id)
-//         VALUES ($1, $2, $3)
-//         RETURNING
-//         id AS cmnt_id, comment, created_at AS cmnt_time, username AS cmnt_writer
-//         `,
-//         [comment, username, imageId]
-//     );
-// };
+exports.addComment = (comment, username, imageid) => {
+    return db.query(
+        `
+        INSERT INTO comments (comment, username, image_id)
+        VALUES ($1, $2, $3)
+        RETURNING
+        id AS cmnt_id, comment, created_at AS cmnt_time, username AS cmnt_writer
+        `,
+        [comment, username, imageid]
+    );
+};
 
 // getAllDetails function
-exports.getAllDetails = (imageId) => {
+exports.getAllDetails = (imageid) => {
     return db.query(
         `
         SELECT 
@@ -50,6 +51,32 @@ exports.getAllDetails = (imageId) => {
         WHERE images.id = $1
         ORDER BY comments.id DESC
         `,
-        [imageId]
+        [imageid]
+    );
+};
+
+exports.getLowestId = () => {
+    return db.query(
+        `
+        SELECT id FROM images
+        ORDER BY id ASC
+        LIMIT 1;
+        `
+    );
+};
+
+exports.getMoreImages = (lastid) => {
+    return db.query(
+        `
+        SELECT url, title, id, (
+        SELECT id FROM images
+        ORDER BY id ASC
+        LIMIT 1
+        ) AS "lowestid" FROM images
+        WHERE id < $1
+        ORDER BY id DESC
+        LIMIT 8;
+        `,
+        [lastid]
     );
 };

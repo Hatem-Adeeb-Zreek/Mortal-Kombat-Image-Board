@@ -22,10 +22,11 @@
                 <input v-model="description" type="text" name="description" placeholder="description" autocomplete="off">
                 <input v-model="username" type="text" name="username" placeholder="user name" autocomplete="off">
                 <button @click="submitImage">submit</button>
+                 <p v-if="errmsg" class="err-msg">you cannot submit without a Title and an Username</p>
 
             </form>
               <div class="image-board">
-                <div class="image-piece" v-for="image in images" @click="imageClick(image.id)">
+                <div class="image-piece" v-for="image in images" :key="image.id" @click="imageClick(image.id)">
                     <div class="image-container">
                         <img v-bind:src="image.url">
                     </div>
@@ -39,12 +40,13 @@
                         @close="closeModalFn"
                     ></modal-component>
               </div>
+              <p id="more-btn" v-if="more" @click="getMore">More Images</p>
         </div>
 
          <script id="modal-template" type="text/x-template">
                  <div>
                     <div class="overlay" @click="closeModal"></div>
-                    <div class="modal">
+                    <div class="modal" v-on:keyup.esc="closeModal">
                           <div class="modal-details">
                             <div class="modal-img-cont">
                                 <img :src="imgDetails.url" alt="" srcset="" class="img-cr">
@@ -57,20 +59,20 @@
                             </div>
                         </div>
                         
-                        <!-- <div id="comments-form">
+                        <div id="comments-form">
                             <form action="">                                
                                 <input v-model="cmtText" type="text" name="cmtText" size="50" placeholder="type your comment here..." autocomplete="off">
                                 <input v-model="cmtUser" type="text" name="cmtUser" size="10" placeholder="your name" autocomplete="off">
                                 <button @click="submitComment">submit</button>
                             </form>
-                        </div> -->
-
-                        <!-- <div class="comments-cont">  
-                             <div class="comment-box" v-if="imgComments[0].cmnt_id" v-for="cmt in imgComments">
+                        </div>
+                         <p v-if="errmsg" class="err-msg">you cannot submit with empty fields</p>
+                        <div class="comments-cont">  
+                              <div class="comment-box" v-for="cmt in imgComments" v-if="cmt.cmnt_id">    
                                 <p>{{ cmt.comment }}</p>
                                  <p class="by-user">written by {{ cmt.cmnt_writer }} at {{cmt.cmnt_time}} </p>
                             </div>
-                        </div> -->
+                        </div>
                          <p @click="closeModal" class="close-btn">close</p>
                     </div>
                 </div>

@@ -26,7 +26,9 @@ input {
     margin: 20px;
 }
 
-button {
+button,
+.close-btn,
+#more-btn {
     border: none;
     padding: 8px 16px;
     vertical-align: middle;
@@ -40,9 +42,15 @@ button {
     border-radius: 5px;
 }
 
-button:hover {
+button:hover,
+.close-btn:hover,
+#more-btn {
     color: whitesmoke;
     transform: translateY(0) scale(1.2);
+}
+
+.err-msg {
+    color: white;
 }
 
 #logo {
@@ -134,6 +142,29 @@ header {
     font-size: 15px;
     font-style: italic;
     align-self: flex-end;
+}
+
+#comments-form {
+    background-color: rgb(131, 10, 10);
+    border-radius: 7px;
+    width: 100%;
+    display: flex;
+    padding: 25px;
+    justify-content: space-around;
+}
+
+.comments-cont {
+    width: 100%;
+    margin-top: 20px;
+    max-height: 10em;
+    overflow: auto;
+}
+
+.comment-box {
+    background-color: rgb(131, 10, 10);
+    border-radius: 7px;
+    padding: 10px;
+    margin-top: 5px;
 }
 
 img {
